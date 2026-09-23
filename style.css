@@ -1,0 +1,383 @@
+/* ---------- Fonts ---------- */
+
+@font-face {
+  font-family: 'Behind The Nineties Sans';
+  src: url('fonts/behind-the-nineties-sans-Rg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Behind The Nineties Sans';
+  src: url('fonts/behind-the-nineties-sans-It.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Kavivanar';
+  src: url('fonts/kavivanar.woff2') format('woff2');
+  font-display: swap;
+}
+/* Subset to just the characters on the site (12 MB -> ~10 KB).
+   Adding new Chinese text? Re-run the pyftsubset command in README.md. */
+@font-face {
+  font-family: 'Hanyi Senty Tang';
+  src: url('fonts/hanyi-senty-tang-subset.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* ---------- Palette (Soft Blue Sky) ---------- */
+
+:root {
+  --sky-1: #02BEFD;
+  --sky-2: #56CAFB;
+  --sky-3: #76D3FE;
+  --sky-4: #A4DFFD;
+  --sky-5: #00B0FC;
+  --sky-6: #019EF3;
+  --yellow: #FFCC29;
+  --black: #000;
+
+  --hand: 'Architects Daughter', cursive;
+  --nineties: 'Behind The Nineties Sans', 'Architects Daughter', sans-serif;
+  --swirl: 'Knewave', 'Architects Daughter', cursive;
+  --tamil: 'Kavivanar', 'Architects Daughter', cursive;
+  --chinese: 'Hanyi Senty Tang', serif;
+}
+
+/* ---------- Base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--hand);
+  color: var(--black);
+  overflow-x: hidden;
+  animation: fade-in 450ms ease-out both;
+}
+
+body[data-next] { cursor: pointer; }
+
+p, h1, h2, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+a { color: inherit; text-decoration: none; }
+
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(16px, 4vmin, 56px);
+}
+
+/* The little "click to continue" cursor. Drawn with a mask so it picks up
+   whatever `color` its parent sets. */
+.pointer {
+  display: inline-block;
+  width: var(--pointer-size, clamp(22px, 3.4vmin, 44px));
+  aspect-ratio: 24 / 28;
+  background: currentColor;
+  -webkit-mask: url('pointer.svg') center / contain no-repeat;
+          mask: url('pointer.svg') center / contain no-repeat;
+  animation: nudge 1.6s ease-in-out infinite;
+  flex: none;
+}
+
+@keyframes nudge {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-3px, -4px); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body, .pointer { animation: none; }
+}
+
+/* ---------- Landing ---------- */
+
+.landing {
+  background: var(--sky-4);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: clamp(12px, 3vw, 48px);
+  font-size: clamp(1.6rem, 5.3vw, 6rem);
+  line-height: 1.15;
+}
+
+.landing .lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.6em;
+}
+
+.landing .en { color: var(--sky-5); }
+.landing .bs { color: var(--sky-1); }
+.landing .es { color: var(--sky-6); }
+.landing .ta {
+  color: var(--sky-2);
+  font-family: var(--tamil);
+  font-size: 0.9em;
+  padding-left: 0.3em;
+}
+.landing .ta .second-line {
+  display: block;
+  padding-left: 7.5em;
+}
+.landing .pointer {
+  --pointer-size: clamp(26px, 5vmin, 56px);
+  color: var(--sky-5);
+  align-self: center;
+}
+.landing .zh {
+  color: var(--sky-3);
+  font-family: var(--chinese);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: min(10.5vh, 1.3em);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  align-self: center;
+}
+
+/* ---------- Page 2: quotes ---------- */
+
+.shelf {
+  background: var(--sky-6);
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: clamp(24px, 6vw, 120px);
+  align-items: center;
+  justify-content: center;
+  --tile: min(30vw, 34vh);
+}
+
+.quotes {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: calc(var(--tile) * 0.1);
+}
+.quotes .col {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--tile) * 0.2);
+}
+/* Staggered like the mockup: the right column drops and spreads its two
+   squares a little further apart. */
+.quotes .col + .col {
+  padding-top: calc(var(--tile) * 0.35);
+  gap: calc(var(--tile) * 0.3);
+}
+
+.quote {
+  margin: 0;
+  background: var(--sky-2);
+  width: var(--tile);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  gap: 0.7em;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 1em 1.1em;
+  font-family: var(--nineties);
+  font-size: calc(var(--tile) * 0.046);
+  line-height: 1.35;
+}
+/* The Shakespeare runs 16 lines, so it gets a smaller size to fit its square. */
+.quote.long { font-size: calc(var(--tile) * 0.036); line-height: 1.3; }
+/* Poems keep their line breaks straight from the HTML source. */
+.quote p { margin: 0; white-space: pre-line; }
+.quote footer { text-align: right; font-style: italic; }
+.quote cite { font-style: normal; }
+/* Sized off the tile so each 12-character line of the poem fits on one row. */
+.quote:lang(zh) { font-family: var(--chinese); font-size: calc(var(--tile) * 0.064); line-height: 1.6; }
+.quote:lang(zh) footer { font-style: normal; font-size: 0.8em; }
+
+.shelf .title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2em;
+  color: var(--sky-4);
+  font-size: clamp(1.4rem, 4.6vmin, 3.4rem);
+  line-height: 1.25;
+  text-align: center;
+}
+.shelf .title .pointer { color: var(--sky-4); }
+
+/* ---------- Page 3: who am I ---------- */
+
+.who {
+  background: var(--sky-1);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(16px, 3vw, 48px);
+  align-items: center;
+}
+
+.who h1 {
+  font-family: var(--swirl);
+  font-weight: 400;
+  color: var(--yellow);
+  font-size: min(24vh, 14vw);
+  line-height: 0.92;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+}
+.who h1 span { display: block; }
+
+.who .body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 3vh, 36px);
+}
+
+.who .intro {
+  color: var(--sky-6);
+  font-size: clamp(1.4rem, 4.2vmin, 3.4rem);
+  line-height: 1.35;
+  max-width: 24ch;
+}
+
+.who .diagram {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+}
+
+.who .outro {
+  font-size: clamp(1.1rem, 3vmin, 2.2rem);
+  line-height: 1.35;
+  max-width: 42ch;
+}
+.who .outro .pointer {
+  vertical-align: -0.35em;
+  margin-left: 0.5em;
+  color: var(--black);
+}
+
+/* ---------- Page 4: work ---------- */
+
+.work {
+  background: var(--sky-2);
+  color: var(--sky-4);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  gap: clamp(16px, 3vmin, 40px) clamp(20px, 4vw, 64px);
+  align-content: center;
+  font-size: clamp(1.1rem, 3.5vmin, 2.5rem);
+  line-height: 1.3;
+  --square: min(26vw, 38vh);
+}
+
+.work .door {
+  background: var(--sky-6);
+  width: var(--square);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--square) * 0.14) calc(var(--square) * 0.1);
+  font-size: calc(var(--square) * 0.155);
+  line-height: 1;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.work .door:hover,
+.work .door:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 0 -2px color-mix(in srgb, var(--sky-6) 60%, black);
+  outline: none;
+}
+.work .door .pointer {
+  --pointer-size: calc(var(--square) * 0.13);
+  align-self: center;
+}
+.work .door.analytical { grid-column: 1; grid-row: 1; }
+.work .door.creative   { grid-column: 3; grid-row: 2; align-self: end; }
+
+.work .art  { grid-column: 2 / 4; grid-row: 1; justify-self: center; }
+.work .talk {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: clamp(20px, 4vw, 60px);
+  align-self: end;
+}
+.work .talk h2 { grid-column: 1 / -1; }
+
+.work h2 { font-size: inherit; font-weight: 400; margin-bottom: 0.3em; }
+.work li { padding-left: 1em; text-indent: -1em; }
+.work li::before { content: '- '; }
+.work .art li { margin-left: 1.5em; }
+
+/* ---------- Work subpages ---------- */
+
+/* Same shape as the blog's full-portfolio page: black category headings,
+   then "- Name (Month): link". Each page picks its two most readable
+   palette shades on its own background, one for names, one for links. */
+.analytical-page { background: var(--sky-5); --name: var(--sky-4); --link: var(--sky-3); }
+.creative-page   { background: var(--sky-3); --name: var(--sky-6); --link: var(--sky-5); }
+
+.portfolio {
+  max-width: 1100px;
+  margin: 0 auto;
+  font-size: clamp(1.05rem, 2.4vmin, 1.5rem);
+  line-height: 1.45;
+}
+.portfolio section + section { margin-top: 2em; }
+.portfolio h2 {
+  color: var(--black);
+  font-size: 1.6em;
+  font-weight: 400;
+  margin-bottom: 0.4em;
+}
+.portfolio li {
+  padding-left: 1em;
+  text-indent: -1em;
+  margin-bottom: 0.45em;
+  color: var(--black);
+}
+.portfolio li::before { content: '- '; }
+.portfolio .name { color: var(--name); }
+.portfolio a,
+.portfolio .pending { color: var(--link); }
+.portfolio a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}
+.portfolio a:hover { text-decoration-thickness: 2px; }
+.portfolio a[href$=".pdf"] { white-space: nowrap; }
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 720px) {
+  .landing { grid-template-columns: 1fr; }
+  .landing .zh { writing-mode: horizontal-tb; font-size: 2.2rem; justify-self: start; }
+  .landing .ta .second-line { padding-left: 3em; }
+
+  .shelf { grid-template-columns: 1fr; --tile: min(82vw, 360px); }
+  .quotes { flex-direction: column; align-items: center; gap: calc(var(--tile) * 0.1); }
+  .quotes .col, .quotes .col + .col { padding-top: 0; gap: calc(var(--tile) * 0.1); }
+  .shelf .title br { display: none; }
+
+  .who { grid-template-columns: 1fr; align-content: center; }
+  .who h1 { font-size: 22vw; }
+  .who h1 span { display: inline; }
+
+  .work { grid-template-columns: 1fr; --square: 70vw; }
+  .work .door.analytical, .work .door.creative, .work .art, .work .talk {
+    grid-column: 1; grid-row: auto; justify-self: center;
+  }
+  .work .talk { grid-template-columns: 1fr; }
+}
